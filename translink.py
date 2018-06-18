@@ -32,3 +32,20 @@ class API:
 
         # Return result
         return contents
+
+    def status_update(self):
+        '''
+        Get all translink status updates
+        '''
+        # http://api.translink.ca/rttiapi/v1/status/all?apikey=[APIKey]
+        base = BASE_URL + '/status/all'
+        requestURL = base + API_ARG + self._key
+
+        # Make request
+        req = urllib2.Request(requestURL, None, {
+                            'Content-Type': 'application/json'})
+        contents = urllib2.urlopen(req).read()
+        contents = json.loads(contents)
+
+        # Return result
+        return contents

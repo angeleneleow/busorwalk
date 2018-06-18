@@ -12,14 +12,24 @@ parser = argparse.ArgumentParser(description='''bow - bus or walk.
 This app talks to Translink and does cool stuff.
 ''')
 parser.add_argument('bus_stop', metavar='[stop]', type=str,
-                    help='Bus stop to find incoming busses')
+                    help='Bus stop to find incoming busses',
+                    default='', nargs='?')
+parser.add_argument('--status', dest='getStatus', action='store_true')
 parser.add_argument('-k', '--key', dest='key')
 
 args = parser.parse_args()
-print 'You entered: ' + args.bus_stop
-
 # Create new API instance with key
 api = translink.API(args.key)
+
+if args.getStatus:
+    statuses = api.status_update()
+    # [
+    #     {'Name', 'Value'},
+    #     {'Name', 'Value'},
+    # ]
+    for status in statuses:
+        print '>> ' + status['Name'] + ': ' + status['Value'] 
+    exit()
 
 ##############
 
