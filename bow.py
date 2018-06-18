@@ -17,12 +17,14 @@ parser.add_argument('-k', '--key', dest='key')
 
 args = parser.parse_args()
 print 'You entered: ' + args.bus_stop
-print 'Your key:    ' + args.key
+
+# Create new API instance with key
+api = translink.API(args.key)
 
 ##############
 
 # http://api.translink.ca/rttiapi/v1/stops/[STOPNUMBER]?apikey=[APIKey]
-stop = translink.stops_request(args.bus_stop, '', args.key)
+stop = api.bus_stop_request(args.bus_stop, '')
 print 'The name of your bus stop is ' + stop['Name']
 
 ###############
@@ -33,7 +35,7 @@ print 'The name of your bus stop is ' + stop['Name']
 #     { RouteNo, RouteName, Schedules: [ { ExpectedCountdown, ExpectedLeaveTime }, { ExpectedCountdown, ExpectedLeaveTime }, { ExpectedCountdown, ExpectedLeaveTime } ] },
 #     { RouteNo, RouteName, Schedules: [ { ExpectedCountdown, ExpectedLeaveTime }, { ExpectedCountdown, ExpectedLeaveTime }, { ExpectedCountdown, ExpectedLeaveTime } ]  },
 # ]
-estimates = translink.stops_request(args.bus_stop, 'estimates', args.key)
+estimates = api.bus_stop_request(args.bus_stop, 'estimates')
 for route in estimates:
     print '##############'
     print "For bus " + route['RouteNo'] + ' (' + route["RouteName"].strip() + '):'
